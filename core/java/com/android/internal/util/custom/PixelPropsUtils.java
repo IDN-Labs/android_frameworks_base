@@ -33,22 +33,21 @@ public class PixelPropsUtils {
     private static final String TAG = PixelPropsUtils.class.getSimpleName();
     private static final boolean DEBUG = false;
 
-    private static final Map<String, Object> propsToChangePixel7Pro;
-
+    private static final Map<String, Object> propsToChange;
     private static final Map<String, Object> propsToChangePixel5;
-    private static final String[] packagesToChangePixel5 = {
-        "com.google.android.tts",
-        "com.google.android.googlequicksearchbox",
-        "com.google.android.apps.recorder"
+    private static final Map<String, Object> propsToChangePixel7Pro;
+    private static final Map<String, Object> propsToChangePixelXL;
+    private static final Map<String, ArrayList<String>> propsToKeep;
+
+    private static final String[] packagesToChangePixel7Pro = {
+            "com.google.android.gms"
     };
 
     // Packages to Spoof as Pixel XL
-    private static final Map<String, Object> propsToChangePixelXL;
     private static final String[] packagesToChangePixelXL = {
         "com.google.android.apps.photos"
     };
 
-    private static final Map<String, ArrayList<String>> propsToKeep;
     private static final String[] extraPackagesToChange = {
         "com.android.chrome",
         "com.breel.wallpapers20",
@@ -143,6 +142,7 @@ public class PixelPropsUtils {
 
     static {
         propsToKeep = new HashMap<>();
+        propsToChange = new HashMap<>();
         propsToKeep.put("com.google.android.settings.intelligence", new ArrayList<>(Collections.singletonList("FINGERPRINT")));
         propsToChangePixel7Pro = new HashMap<>();
         propsToChangePixel7Pro.put("BRAND", "google");
@@ -204,14 +204,16 @@ public class PixelPropsUtils {
                     return;
             }
 
-            Map<String, Object> propsToChange = propsToChangePixel7Pro;
-
-            if (Arrays.asList(packagesToChangePixel5).contains(packageName)) {
-                propsToChange = propsToChangePixel5;
-            }
-
-            if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
-                propsToChange = propsToChangePixelXL;
+            if (packageName.equals("com.google.android.apps.photos")) {
+                propsToChange.putAll(propsToChangePixelXL);
+            } else {
+                if (Arrays.asList(packagesToChangePixel7Pro).contains(packageName)) {
+                    propsToChange.putAll(propsToChangePixel7Pro);
+                } else if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
+                    propsToChange.putAll(propsToChangePixelXL);
+                } else {
+                    propsToChange.putAll(propsToChangePixel5);
+                }
             }
 
             if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
