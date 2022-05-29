@@ -71,7 +71,8 @@ public class PixelPropsUtils {
         "com.google.android.MTCL83",
         "com.google.android.UltraCVM",
         "com.google.android.youtube",
-        "com.google.ar.core"
+        "com.google.ar.core",
+        "com.google.android.apps.recorder"
     };
 
     private static final String[] streamingPackagesToChange = {
