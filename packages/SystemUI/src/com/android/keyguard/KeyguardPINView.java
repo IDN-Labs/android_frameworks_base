@@ -32,6 +32,7 @@ import java.util.List;
 
 import com.android.internal.widget.LockPatternUtils.RequestThrottledException;
 import com.android.keyguard.PasswordTextView.QuickUnlockListener;
+import com.android.keyguard.KeyguardSecurityModel.SecurityMode;
 import com.android.settingslib.animation.AppearAnimationUtils;
 import com.android.settingslib.animation.DisappearAnimationUtils;
 import com.android.systemui.R;
@@ -243,7 +244,7 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
                     && kpvCheckPassword(password)) {
                 mPasswordEntry.setEnabled(false);
                 mCallback.reportUnlockAttempt(userId, true, 0);
-                mCallback.dismiss(true, userId);
+                mCallback.dismiss(true, userId, getSecurityMode());
                 resetPasswordText(true, true);
             }
         }
@@ -255,5 +256,10 @@ public class KeyguardPINView extends KeyguardPinBasedInputView {
         } catch (RequestThrottledException ex) {
             return false;
         }
+    }
+
+    @Override
+    public SecurityMode getSecurityMode() {
+        return SecurityMode.PIN;
     }
 }
